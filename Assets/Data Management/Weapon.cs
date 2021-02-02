@@ -52,7 +52,7 @@ public class Weapon
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT weapon_name, class_type, weapon_type, low_damage, high_damage, description, catchphrase, poison_percent, poison_damage, critical_percent, critical_damage, damage_boost, defense_boost, paralyze_percent, paralyze_length, healing_amount " + "FROM weapons" + " WHERE id = \"" + id + "\";";
+        string sqlQuery = "SELECT weapon_name, class, type, low_damage, high_damage, description, catchphrase, poison_percent, poison_damage, poison_length, critical_percent, critical_damage, damage_boost, defense_boost, paralyze_percent, paralyze_length, healing_amount " + "FROM weapons" + " WHERE id = \"" + id + "\";";
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
@@ -63,17 +63,24 @@ public class Weapon
             low_damage = reader.GetInt32(3);
             high_damage = reader.GetInt32(4);
             description = reader.GetString(5);
-            catchphrase = reader.GetString(5);
-            poison_percent = reader.GetFloat(6);
-            poison_damage = reader.GetInt32(7);
-            poison_length = reader.GetInt32(8);
-            critical_percent = reader.GetFloat(9);
-            critical_damage = reader.GetInt32(10);
-            damage_boost = reader.GetFloat(11);
-            defense_boost = reader.GetInt32(12);
-            paralyze_percent = reader.GetFloat(13);
-            paralyze_length = reader.GetInt32(14);
-            healing_amount = reader.GetInt32(15);
+            catchphrase = reader.GetString(6);
+            poison_percent = (float)reader.GetDouble(7);
+            poison_damage = reader.GetInt32(8);
+            poison_length = reader.GetInt32(9);
+            critical_percent = (float)reader.GetDouble(10);
+            critical_damage = reader.GetInt32(11);
+            damage_boost = (float)reader.GetDouble(12);
+            defense_boost = reader.GetInt32(13);
+            paralyze_percent = (float)reader.GetDouble(14);
+            paralyze_length = reader.GetInt32(15);
+            healing_amount = reader.GetInt32(16);
+
+            Debug.Log("weapon_name = " + weapon_name + "  class_type = " + class_type + "  weapon_type = " + weapon_type
+            + "  low_damage = " + low_damage + "  high_damage = " + high_damage + "  description = " + description
+            + "  catchphrase = " + catchphrase + "  poison_percent = " + poison_percent + "  poison_damage = " + poison_damage
+            + "  poison_length = " + poison_length + "  critical_percent = " + critical_percent + "  critical_damage = " + critical_damage
+            + "  damage_boost = " + damage_boost + "  defense_boost = " + defense_boost + "  paralyze_percent = " + paralyze_percent
+            + "  paralyze_length = " + paralyze_length + "  healing_amount = " + healing_amount);
         }
         reader.Close();
         reader = null;
