@@ -32,7 +32,7 @@ public class CommonEnemyData
             low_damage = reader.GetInt32(1);
             high_damage = reader.GetInt32(2);
 
-            Debug.Log("name = " + name + "  low_damage = " + low_damage + "  high_damage = " + high_damage);
+            //Debug.Log("name = " + name + "  low_damage = " + low_damage + "  high_damage = " + high_damage);
         }
         reader.Close();
         reader = null;

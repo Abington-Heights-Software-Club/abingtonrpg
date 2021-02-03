@@ -5,10 +5,10 @@ using Mono.Data.Sqlite;
 using System.Data;
 using System;
 
-public class PlayableCharacterData
+public class BossData
 {
     /*
-      Attributes of Playable Character:
+      Attributes of Bosses:
          name : string
          low_damage : int
          high_damage : int
@@ -16,14 +16,14 @@ public class PlayableCharacterData
     public string name { get; private set; }
     public int low_damage { get; private set; }
     public int high_damage { get; private set; }
-    public PlayableCharacterData(string id)
+    public BossData(string id)
     {
         string conn = "URI=file:" + Application.dataPath + "/Data Management/data.db"; //Path to database.
         IDbConnection dbconn;
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT character_name, low_damage, high_damage " + "FROM playable_characters" + " WHERE ID = \"" + id + "\";";
+        string sqlQuery = "SELECT boss_name, low_damage, high_damage " + "FROM bosses" + " WHERE ID = \"" + id + "\";";
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
@@ -32,7 +32,7 @@ public class PlayableCharacterData
             low_damage = reader.GetInt32(1);
             high_damage = reader.GetInt32(2);
 
-            //Debug.Log("name = " + name + "  low_damage = " + low_damage + "  high_damage = " + high_damage);
+            Debug.Log("name = " + name + "  low_damage = " + low_damage + "  high_damage = " + high_damage);
         }
         reader.Close();
         reader = null;

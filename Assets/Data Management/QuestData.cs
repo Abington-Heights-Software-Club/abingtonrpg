@@ -32,7 +32,7 @@ public class QuestData
             description = reader.GetString(1);
             xp_gained = reader.GetInt32(2);
 
-            Debug.Log("name = " + name + "  description = " + description + "  xp_gained = " + xp_gained);
+            //Debug.Log("name = " + name + "  description = " + description + "  xp_gained = " + xp_gained);
         }
         reader.Close();
         reader = null;

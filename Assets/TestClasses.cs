@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class TestClasses : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         //CommonEnemy enemy = new CommonEnemy("chromebook_n22");
         //Debug.Log(enemy.name);
-        Weapon poison_vial = new Weapon("test_tube");
-        Debug.Log(poison_vial.weapon_name);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //QuestData quest = new QuestData("getting_started");
+        //Debug.Log(quest.xp_gained);
+        //Weapon poison_vial = new Weapon("test_tube");
+        //Debug.Log(poison_vial.weapon_name);
+        //NPCData npc = new NPCData("michael");
+        //Debug.Log(npc.dialogue);
+        //PlayableCharacterData character = new PlayableCharacterData("vannan");
+        //Debug.Log(character.name);
+        BossData character = new BossData("stroyan");
+        Debug.Log(character.low_damage);
     }
 }
