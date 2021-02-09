@@ -52,7 +52,7 @@ public class Weapon
         dbconn = (IDbConnection)new SqliteConnection(conn);
         dbconn.Open(); //Open connection to the database.
         IDbCommand dbcmd = dbconn.CreateCommand();
-        string sqlQuery = "SELECT weapon_name, class, type, low_damage, high_damage, description, catchphrase, poison_percent, poison_damage, poison_length, critical_percent, critical_damage, damage_boost, defense_boost, paralyze_percent, paralyze_length, healing_amount " + "FROM weapons" + " WHERE id = \"" + id + "\";";
+        string sqlQuery = "SELECT weapon_name, class, type, low_damage, high_damage, description, catchphrase, poison_percent, poison_damage, poison_length, critical_percent, critical_damage, damage_boost, defense_boost, paralyze_percent, paralyze_length, healing_amount " + "FROM weapons" + " WHERE ID = \"" + id + "\";";
         dbcmd.CommandText = sqlQuery;
         IDataReader reader = dbcmd.ExecuteReader();
         while (reader.Read())
