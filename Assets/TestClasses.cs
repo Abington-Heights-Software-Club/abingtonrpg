@@ -14,9 +14,11 @@ public class TestClasses : MonoBehaviour
         //Debug.Log(poison_vial.weapon_name);
         //NPCData npc = new NPCData("michael");
         //Debug.Log(npc.dialogue);
-        //PlayableCharacterData character = new PlayableCharacterData("vannan");
-        //Debug.Log(character.name);
-        BossData character = new BossData("stroyan");
-        Debug.Log(character.low_damage);
+        PlayableCharacterData character = new PlayableCharacterData("vannan");
+        Debug.Log(character.health);
+        //BossData character = new BossData("stroyan");
+        //Debug.Log(character.low_damage);
+        CurrentPartyData.addMember(0, "sharrow");
+        Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth);
     }
 }
