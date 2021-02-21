@@ -14,11 +14,19 @@ public class TestClasses : MonoBehaviour
         //Debug.Log(poison_vial.weapon_name);
         //NPCData npc = new NPCData("michael");
         //Debug.Log(npc.dialogue);
-        PlayableCharacterData character = new PlayableCharacterData("vannan");
-        Debug.Log(character.health);
+        //PlayableCharacterData character = new PlayableCharacterData("vannan");
+        //Debug.Log(character.health);
         //BossData character = new BossData("stroyan");
         //Debug.Log(character.low_damage);
-        CurrentPartyData.addMember(0, "sharrow");
-        Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth);
+        //CurrentPartyData.addMember(0, "sharrow");
+        //Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth);
+        //CurrentPartyData.addItem("heal");
+        //CurrentPartyData.addItem("heal");
+        //CurrentPartyData.addItem("wither");
+        //Debug.Log(CurrentPartyData.inventory[0].item.consumable_name + " " + CurrentPartyData.inventory[0].itemAmount + " " + CurrentPartyData.inventory[1].item.consumable_name + " " + CurrentPartyData.inventory[1].itemAmount);
+        //if(CurrentPartyData.inventory[2] == null)
+        //{
+            //Debug.Log("Nothing!");
+        //}
     }
 }
