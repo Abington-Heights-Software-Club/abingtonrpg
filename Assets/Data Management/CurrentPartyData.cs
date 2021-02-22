@@ -7,6 +7,7 @@ public static class CurrentPartyData
 {
     public static int partySize = 4;
     public static int inventorySize = 10;
+    public static int energyMax = 100;
     //Array of PartyMember objects that store the user's current party
     public static PartyMember[] party = new PartyMember[partySize];
     //Array of custom made Tuples that holds the item (type: ConsumableData) and itemAmount (type: int)
@@ -19,10 +20,10 @@ public static class CurrentPartyData
     }
 
     //Takes newItem (type: string) add adds to inventory. If one already exists it increases itemAmount by 1
-    public static void addItem(string newItem)
+    public static void addItem(string newItemID)
     {
         int firstEmpty = Array.FindIndex(inventory, i => i == null);
-        ConsumableData newItemData = new ConsumableData(newItem);
+        ConsumableData newItemData = new ConsumableData(newItemID);
         for (int i = 0; i < firstEmpty; i++)
         {
             if(newItemData.consumable_name.Equals(inventory[i].item.consumable_name))
@@ -37,13 +38,46 @@ public static class CurrentPartyData
     //Custom class to store all database data and current data of the user's party members
     public class PartyMember {
         public PlayableCharacterData playerData { get; private set; }
+        public int currentMaxHealth { get; private set; }
         public int currentHealth { get; set; }
+        public int currentLevel { get; private set;  }
         public int currentXP { get; private set; }
+        public int currentXPCap { get; private set; }
+        public int currentLowDamage { get; private set; }
+        public int currentHighDamage { get; private set; }
+        public WeaponData equippedWeapon { get; private set; }
+        public WearableData equippedArmor { get; private set; }
+        public int currentEnergy { get; private set; }
         public PartyMember(string id)
         {
             playerData = new PlayableCharacterData(id);
-            currentHealth = playerData.health;
+            currentMaxHealth = playerData.base_health;
+            currentHealth = currentMaxHealth;
             currentXP = 0;
+            currentLevel = 0;
+            currentXPCap = playerData.base_xp_cap;
+            currentLowDamage = playerData.base_low_damage;
+            currentHighDamage = playerData.base_high_damage;
+            equippedArmor = null;
+            equippedWeapon = null;
+            currentEnergy = energyMax;
+        }
+        public void addXP(int addedXP)
+        {
+            currentXP += addedXP;
+            while(currentXP >= currentXPCap)
+            {
+                currentXP -= currentXPCap;
+                levelUp();
+            }
+        }
+        private void levelUp()
+        {
+            currentMaxHealth += playerData.levelUp_health;
+            currentLowDamage += playerData.levelUp_damage;
+            currentHighDamage += playerData.levelUp_damage;
+            currentXPCap += playerData.levelUp_xp_cap;
+            currentLevel++;
         }
     }
 

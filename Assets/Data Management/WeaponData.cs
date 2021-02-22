@@ -5,7 +5,7 @@ using Mono.Data.Sqlite;
 using System.Data;
 using System;
 
-public class Weapon
+public class WeaponData
 {
     /*
      Attributes of Weapon:
@@ -45,7 +45,7 @@ public class Weapon
      public int paralyze_length {get; private set;}
      public int healing_amount {get; private set;}
 
-     public Weapon(string id)
+     public WeaponData(string id)
      {
         string conn = "URI=file:" + Application.dataPath + "/Data Management/data.db"; //Path to database.
         IDbConnection dbconn;
