@@ -36,6 +36,17 @@ public class BattleLogic : MonoBehaviour
     //amount of health heal button gives
     public int healAmount = 35;
 
+
+
+    //stuff for inventory
+    public Dropdown dropdown;
+    public List<string> combatOptions = new List<string>(); 
+    public GameObject selection; 
+    private bool inventoryMode; 
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,6 +54,17 @@ public class BattleLogic : MonoBehaviour
         state = BattleState.START;
         //syntax to call an IEnumerator
         StartCoroutine(SetUpBattle());
+
+
+        //sets up inventory
+        dropdown.gameObject.SetActive(inventoryMode);
+        combatOptions.Add("PogMike");
+        combatOptions.Add("BigEvan");
+        combatOptions.Add("SadChris");
+        for(int i = 0; i< combatOptions.Count;i++){
+            dropdown.options.Add(new Dropdown.OptionData() {text = combatOptions[i]});
+        }
+
     }
 
     //Is called from start method
@@ -98,7 +120,7 @@ public class BattleLogic : MonoBehaviour
         yield return new WaitForSeconds(time-1f);
         bool isDead = playerInfo.TakeDamage(enemyInfo.damage);
         playerUI.SetHp(playerInfo.currentHP);
-        yield return new WaitForSeconds(time-1f);
+        yield return new WaitForSeconds(time-1.5f);
 
         if(isDead){
             state = BattleState.LOSS;
@@ -151,5 +173,14 @@ public class BattleLogic : MonoBehaviour
             return;
         }
         StartCoroutine(PlayerHeal());
+    }
+
+    public void HideSelectionShowInventory(){
+        inventoryMode = !inventoryMode;
+        if(inventoryMode == true){
+            dialogue.text = "Choose an item";
+        }
+        dropdown.gameObject.SetActive(inventoryMode);
+        selection.gameObject.SetActive(!inventoryMode);
     }
 }
