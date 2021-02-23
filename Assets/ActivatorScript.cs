@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ActivatorScript : MonoBehaviour
 {   
-    public keyCode key;
+    public KeyCode key;
     bool active = false;
     GameObject note;
 
@@ -16,7 +16,7 @@ public class ActivatorScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-     if(Input.GetKeyDown(key()&&active){
+     if(Input.GetKeyDown(key)&&active){
         Destroy(note);
      }   
     }
