@@ -15,8 +15,20 @@ public class TestClasses : MonoBehaviour
         //NPCData npc = new NPCData("michael");
         //Debug.Log(npc.dialogue);
         //PlayableCharacterData character = new PlayableCharacterData("vannan");
-        //Debug.Log(character.name);
-        BossData character = new BossData("stroyan");
-        Debug.Log(character.low_damage);
+        //Debug.Log(character.levelUp_xp_cap);
+        //BossData character = new BossData("stroyan");
+        //Debug.Log(character.low_damage);
+        //CurrentPartyData.addMember(0, "sharrow");
+        //CurrentPartyData.party[0].addXP(210);
+        //CurrentPartyData.party[0].currentHealth -= 10;
+        //Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth + " Level: " + CurrentPartyData.party[0].currentLevel + " XP: " + CurrentPartyData.party[0].currentXP + " Low Damage: " + CurrentPartyData.party[0].currentLowDamage);
+        //CurrentPartyData.addItem("heal");
+        //CurrentPartyData.addItem("heal");
+        //CurrentPartyData.addItem("wither");
+        //Debug.Log(CurrentPartyData.inventory[0].item.consumable_name + " " + CurrentPartyData.inventory[0].itemAmount + " " + CurrentPartyData.inventory[1].item.consumable_name + " " + CurrentPartyData.inventory[1].itemAmount);
+        //if(CurrentPartyData.inventory[2] == null)
+        //{
+            //Debug.Log("Nothing!");
+        //}
     }
 }
