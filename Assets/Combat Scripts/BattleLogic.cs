@@ -38,14 +38,6 @@ public class BattleLogic : MonoBehaviour
 
 
 
-    //stuff for inventory
-    public Dropdown dropdown;
-    public List<string> combatOptions = new List<string>(); 
-    public GameObject selection; 
-    private bool inventoryMode; 
-
-
-
 
     // Start is called before the first frame update
     void Start()
@@ -54,16 +46,6 @@ public class BattleLogic : MonoBehaviour
         state = BattleState.START;
         //syntax to call an IEnumerator
         StartCoroutine(SetUpBattle());
-
-
-        //sets up inventory
-        dropdown.gameObject.SetActive(inventoryMode);
-        combatOptions.Add("PogMike");
-        combatOptions.Add("BigEvan");
-        combatOptions.Add("SadChris");
-        for(int i = 0; i< combatOptions.Count;i++){
-            dropdown.options.Add(new Dropdown.OptionData() {text = combatOptions[i]});
-        }
 
     }
 
@@ -175,12 +157,4 @@ public class BattleLogic : MonoBehaviour
         StartCoroutine(PlayerHeal());
     }
 
-    public void HideSelectionShowInventory(){
-        inventoryMode = !inventoryMode;
-        if(inventoryMode == true){
-            dialogue.text = "Choose an item";
-        }
-        dropdown.gameObject.SetActive(inventoryMode);
-        selection.gameObject.SetActive(!inventoryMode);
-    }
 }
