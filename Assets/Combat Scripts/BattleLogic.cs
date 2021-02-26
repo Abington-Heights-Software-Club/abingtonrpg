@@ -27,10 +27,6 @@ public class BattleLogic : MonoBehaviour
     //UI text where interaction with user is held
     public Text dialogue;
 
-    // Holds "info" on players essentially just Enemy objects where you can call accessor and modifer methods to change values
-    Enemy playerInfo;
-    Enemy enemyInfo;
-
     //time it takes to switch turn 
     public float time = 2f; 
     //amount of health heal button gives
@@ -53,18 +49,15 @@ public class BattleLogic : MonoBehaviour
     IEnumerator SetUpBattle() {
         //GO = GameOject 
         GameObject playerGO = Instantiate(playerPrefab, playerPad);
-        //gets all variables from enemy class sets the Enemy object to the current instainated player
-        playerInfo = playerGO.GetComponent<Enemy>();
 
         //same as code above ^^^
         GameObject  enemyGO = Instantiate(enemyPrefab, enemyPad);
-        enemyInfo = enemyGO.GetComponent<Enemy>();
 
-        dialogue.text = "You go through a hall and a " + enemyInfo.name + " approaches";
+        dialogue.text = "You go through a hall and a " + CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name + " approaches";
 
         //sets all of player and enemy info to their tags above them
-        playerUI.SetHUD(playerInfo);
-        enemyUI.SetHUD(enemyInfo);
+        playerUI.SetPlayerHUD(CurrentPartyData.party[0]);
+        enemyUI.SetEnemyHUD(CombatEnemyData.commonCombatEnemyParty[0]);
 
         //quirky line of code that gives user some time to digest the current scene before switching to player turn
         yield return new WaitForSeconds(time);
@@ -77,15 +70,23 @@ public class BattleLogic : MonoBehaviour
     }
 
     IEnumerator PlayerAttack(){
-        //Attack + check to see if enemy is dead (true/false)
-        bool isDead = enemyInfo.TakeDamage(playerInfo.damage);
-        //changes displayed health
-        enemyUI.SetHp(enemyInfo.currentHP);
+        System.Random r = new System.Random();
+        int damage = r.Next(CurrentPartyData.party[0].currentLowDamage, CurrentPartyData.party[0].currentHighDamage);
+        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage < 0)
+        {
+            CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
+        }
+        else
+        {
+            CombatEnemyData.commonCombatEnemyParty[0].currentHealth -= damage;
+        }
+        enemyUI.SetHp(CombatEnemyData.commonCombatEnemyParty[0].currentHealth);
         dialogue.text = "The attack is successful";
         yield return new WaitForSeconds(time);
         //if enemy dies during player turn it has to be a win
         //eventually may have to check if all enemy healths = 0
-        if(isDead){
+        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth == 0)
+        {
             state = BattleState.WIN;
             EndBattle();
         }
@@ -98,13 +99,22 @@ public class BattleLogic : MonoBehaviour
     }
 //Same logic as player turn ^^^
     IEnumerator EnemyTurn(){
-        dialogue.text = enemyInfo.name + " is attacking";
+        System.Random r = new System.Random();
+        dialogue.text = CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name + " is attacking";
         yield return new WaitForSeconds(time-1f);
-        bool isDead = playerInfo.TakeDamage(enemyInfo.damage);
-        playerUI.SetHp(playerInfo.currentHP);
+        int damage = r.Next(CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.low_damage, CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.high_damage);
+        if(CurrentPartyData.party[0].currentHealth - damage < 0)
+        {
+            CurrentPartyData.party[0].currentHealth = 0;
+        }
+        else
+        {
+            CurrentPartyData.party[0].currentHealth -= damage;
+        }
+        playerUI.SetHp(CurrentPartyData.party[0].currentHealth);
         yield return new WaitForSeconds(time-1.5f);
 
-        if(isDead){
+        if(CurrentPartyData.party[0].currentHealth == 0){
             state = BattleState.LOSS;
             EndBattle();
         }
@@ -131,8 +141,8 @@ public class BattleLogic : MonoBehaviour
     //just increases player health using Heal() method from Enemy class
     //doesn't  have to check for win because you can't win from healing
     IEnumerator PlayerHeal(){
-        playerInfo.Heal(healAmount);
-        playerUI.SetHp(playerInfo.currentHP);
+        CurrentPartyData.party[0].currentHealth += healAmount;
+        playerUI.SetHp(CurrentPartyData.party[0].currentHealth);
         dialogue.text = "You healed, wow, congrats";
 
         yield return new WaitForSeconds(time);
