@@ -11,17 +11,22 @@ public static class CombatEnemyData
     public static int bossCurrentHealth { get; private set; }
 
     //Static method that sets up the boss for the fight. 
-    public static void setCombatEnemy(bool isBoss, string id)
+    public static void setCombatEnemy(bool isBoss, string[] ids)
     {
         isBossFight = isBoss;
         if(isBoss)
         {
-            // boss = new BossData(id);
-            // bossCurrentHealth = boss.health;
+            boss = new BossData(ids[0]);
+            bossCurrentHealth = boss.health;
         }
         else
         {
-
+            int count = 0;
+            foreach(string id in ids)
+            {
+                commonCombatEnemyParty[count] = new CommonCombatEnemy(id);
+                count++;
+            }
         }
     }
 
@@ -30,8 +35,8 @@ public static class CombatEnemyData
         public int currentHealth;
         public CommonCombatEnemy(string id)
         {
-            // combatEnemyData = new CommonEnemyData(id);
-            // currentHealth = combatEnemyData.health;
+            combatEnemyData = new CommonEnemyData(id);
+            currentHealth = combatEnemyData.health;
         }
     }
 }
