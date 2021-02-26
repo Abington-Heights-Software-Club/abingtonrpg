@@ -14,7 +14,7 @@ public class UI : MonoBehaviour
         nameText.text = entity.name;
         levelText.text = "Lvl " + entity.level+".";
         hpSlider.maxValue= entity.maxHp;
-        hpSlider.maxValue = entity.currentHP;
+        hpSlider.value = entity.currentHP;
     }
     //health right now is the only thing that changes in battle so it has it's own method
     public void SetHp(int hp){

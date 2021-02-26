@@ -36,8 +36,9 @@ public class BattleLogic : MonoBehaviour
     //amount of health heal button gives
     public int healAmount = 35;
 
-
-
+    private bool inventoryMode;
+    public GameObject pannel; 
+    public GameObject selection;
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +47,8 @@ public class BattleLogic : MonoBehaviour
         state = BattleState.START;
         //syntax to call an IEnumerator
         StartCoroutine(SetUpBattle());
-
+        //
+        pannel.gameObject.SetActive(inventoryMode);
     }
 
     //Is called from start method
@@ -156,5 +158,12 @@ public class BattleLogic : MonoBehaviour
         }
         StartCoroutine(PlayerHeal());
     }
-
+    public void HideSelectionShowInventory(){
+        inventoryMode = !inventoryMode;
+        if(inventoryMode == true){
+            dialogue.text = "Choose an item";
+        }
+        pannel.gameObject.SetActive(inventoryMode);
+        selection.gameObject.SetActive(!inventoryMode);
+    }
 }
