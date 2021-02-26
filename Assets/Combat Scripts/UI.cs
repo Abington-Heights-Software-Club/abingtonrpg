@@ -8,13 +8,20 @@ public class UI : MonoBehaviour
     public Text levelText; 
     public Slider hpSlider;
 
-// Start is called before the first frame update
+    // Start is called before the first frame update
+    //sets all standard player info
+    public void SetPlayerHUD(CurrentPartyData.PartyMember entity)
+    {
+        nameText.text = entity.playerData.name;
+        levelText.text = "Lvl. " + entity.currentLevel;
+        hpSlider.maxValue = entity.currentMaxHealth;
+        hpSlider.value = entity.currentHealth;
+    }
     //sets all standard enemy info
-    public void SetHUD(Enemy entity){
-        nameText.text = entity.name;
-        levelText.text = "Lvl " + entity.level+".";
-        hpSlider.maxValue= entity.maxHp;
-        hpSlider.value = entity.currentHP;
+    public void SetEnemyHUD(CombatEnemyData.CommonCombatEnemy entity){
+        nameText.text = entity.combatEnemyData.name;
+        hpSlider.maxValue= entity.combatEnemyData.health;
+        hpSlider.value = entity.combatEnemyData.health;
     }
     //health right now is the only thing that changes in battle so it has it's own method
     public void SetHp(int hp){
