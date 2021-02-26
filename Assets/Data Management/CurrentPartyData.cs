@@ -74,6 +74,7 @@ public static class CurrentPartyData
         private void levelUp()
         {
             currentMaxHealth += playerData.levelUp_health;
+            currentHealth +=playerData.levelUp_health;
             currentLowDamage += playerData.levelUp_damage;
             currentHighDamage += playerData.levelUp_damage;
             currentXPCap += playerData.levelUp_xp_cap;

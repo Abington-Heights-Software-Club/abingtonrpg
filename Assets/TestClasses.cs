@@ -23,6 +23,7 @@ public class TestClasses : MonoBehaviour
         CurrentPartyData.party[0].currentHealth -= 10;
         //Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth + " Level: " + CurrentPartyData.party[0].currentLevel + " XP: " + CurrentPartyData.party[0].currentXP + " Low Damage: " + CurrentPartyData.party[0].currentLowDamage);
         CombatEnemyData.setCombatEnemy(false, new string[] { "chromebook_n22" });
+        Debug.Log(CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name); 
         CurrentPartyData.addItem("heal");
         CurrentPartyData.addItem("heal");
         CurrentPartyData.addItem("wither");

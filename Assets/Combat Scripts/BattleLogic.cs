@@ -55,8 +55,7 @@ public class BattleLogic : MonoBehaviour
         //same as code above ^^^
         GameObject  enemyGO = Instantiate(enemyPrefab, enemyPad);
 
-        dialogue.text = "You go through a hall and a " + CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name + " approaches";
-
+ 
         //sets all of player and enemy info to their tags above them
         playerUI.SetPlayerHUD(CurrentPartyData.party[0]);
         enemyUI.SetEnemyHUD(CombatEnemyData.commonCombatEnemyParty[0]);
@@ -74,6 +73,7 @@ public class BattleLogic : MonoBehaviour
     IEnumerator PlayerAttack(){
         System.Random r = new System.Random();
         int damage = r.Next(CurrentPartyData.party[0].currentLowDamage, CurrentPartyData.party[0].currentHighDamage);
+        Debug.Log(damage);
         if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage < 0)
         {
             CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
