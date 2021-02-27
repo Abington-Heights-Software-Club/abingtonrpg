@@ -4,34 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
-    public Text nameText; 
+    public Text enemyNameText;
+    public Text playerNameText;
     public Text levelText; 
-    public Slider hpSlider;
-
+    public Slider playerHpSlider;
+    public Slider enemyHpSlider;
+    //UI text where interaction with user is held
+    public Text dialogue;
     // Start is called before the first frame update
     //sets all standard player info
     public void SetPlayerHUD(CurrentPartyData.PartyMember entity)
     {
-        nameText.text = entity.playerData.name;
+        playerNameText.text = entity.playerData.name;
         levelText.text = "Lvl. " + entity.currentLevel;
-        hpSlider.maxValue = entity.currentMaxHealth;
-        hpSlider.value = entity.currentHealth;
+        playerHpSlider.maxValue = entity.currentMaxHealth;
+        playerHpSlider.value = entity.currentHealth;
     }
     //sets all standard enemy info
     public void SetEnemyHUD(CombatEnemyData.CommonCombatEnemy entity){
-        nameText.text = entity.combatEnemyData.name;
-        hpSlider.maxValue= entity.combatEnemyData.health;
-        hpSlider.value = entity.combatEnemyData.health;
+        enemyNameText.text = entity.combatEnemyData.name;
+        enemyHpSlider.maxValue= entity.combatEnemyData.health;
+        enemyHpSlider.value = entity.combatEnemyData.health;
     }
     //health right now is the only thing that changes in battle so it has it's own method
-    public void SetHp(int hp){
-        hpSlider.value = hp;
+    public void SetPlayerHp(int hp){
+        playerHpSlider.value = hp;
     }
-    
-   
-    void Start(){
-        
-        
+    public void SetEnemyHp(int hp)
+    {
+        enemyHpSlider.value = hp;
+    }
+   public void SetText(string message)
+    {
+        dialogue.text = message;
     }
 
     
