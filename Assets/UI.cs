@@ -19,5 +19,6 @@ public class UI : MonoBehaviour
         hpSlider.value = hp;
     }
 
+ 
     
 }
