@@ -18,11 +18,24 @@ public class TestClasses : MonoBehaviour
         //Debug.Log(character.levelUp_xp_cap);
         //BossData character = new BossData("stroyan");
         //Debug.Log(character.health);
-        CurrentPartyData.addMember(0, "sharrow");
+        CurrentPartyData.addMember("sharrow");
+        CurrentPartyData.addMember("vannan");
+        CurrentPartyData.addMember("sharrow");
+        //foreach(CurrentPartyData.PartyMember member in CurrentPartyData.party)
+        //{
+            //if(member == null)
+            //{
+                //Debug.Log("null");
+            //}
+            //else
+            //{
+                //Debug.Log(member.playerData.name);
+            //}
+        //}
         CurrentPartyData.party[0].addXP(210);
         CurrentPartyData.party[0].currentHealth -= 10;
         //Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth + " Level: " + CurrentPartyData.party[0].currentLevel + " XP: " + CurrentPartyData.party[0].currentXP + " Low Damage: " + CurrentPartyData.party[0].currentLowDamage);
-        CombatEnemyData.setCombatEnemy(false, new string[] { "chromebook_n22" });
+        CombatEnemyData.setCombatEnemy(false, new string[] { "chromebook_n22", "chromebook_n21" });
         Debug.Log(CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name); 
         CurrentPartyData.addItem("heal");
         CurrentPartyData.addItem("heal");

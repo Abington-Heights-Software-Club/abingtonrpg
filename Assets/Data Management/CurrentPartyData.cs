@@ -6,17 +6,30 @@ using UnityEngine;
 public static class CurrentPartyData
 {
     public static int partySize = 4;
+    public static int currentPartySize = 0;
     public static int inventorySize = 10;
     public static int energyMax = 100;
+    public static int goodQuestionTokens = 0;
     //Array of PartyMember objects that store the user's current party
     public static PartyMember[] party = new PartyMember[partySize];
     //Array of custom made Tuples that holds the item (type: ConsumableData) and itemAmount (type: int)
     public static InventoryItem<ConsumableData, int>[] inventory = new InventoryItem<ConsumableData, int>[inventorySize];
     
     //Takes int position and id (type: int) and adds a PartyMember object with the id into party array from 0-partySize
-    public static void addMember(int position, string id)
+    //Will fill up first available empty space. If there are no spaces it will swap the partyMember at int position with new one
+    public static void addMember(string id, int position = -1)
     {
-        party[position] = new PartyMember(id);
+        
+        if(currentPartySize < partySize)
+        {
+            //Debug.Log("First empty party " + currentPartySize);
+            party[currentPartySize] = new PartyMember(id);
+            currentPartySize++;
+        } 
+        else
+        {
+            party[position] = new PartyMember(id);
+        }
     }
 
     //Takes newItem (type: string) add adds to inventory. If one already exists it increases itemAmount by 1
