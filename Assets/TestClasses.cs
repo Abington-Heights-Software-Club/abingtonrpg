@@ -21,17 +21,17 @@ public class TestClasses : MonoBehaviour
         CurrentPartyData.addMember("sharrow");
         CurrentPartyData.addMember("vannan");
         CurrentPartyData.addMember("sharrow");
-        //foreach(CurrentPartyData.PartyMember member in CurrentPartyData.party)
-        //{
-            //if(member == null)
-            //{
-                //Debug.Log("null");
-            //}
-            //else
-            //{
-                //Debug.Log(member.playerData.name);
-            //}
-        //}
+        foreach(CurrentPartyData.PartyMember member in CurrentPartyData.party)
+        {
+            if(member == null)
+            {
+                Debug.Log("null");
+            }
+            else
+            {
+                Debug.Log(member.playerData.name);
+            }
+        }
         CurrentPartyData.party[0].addXP(210);
         CurrentPartyData.party[0].currentHealth -= 10;
         //Debug.Log("Sharrow Health: " + CurrentPartyData.party[0].currentHealth + " Level: " + CurrentPartyData.party[0].currentLevel + " XP: " + CurrentPartyData.party[0].currentXP + " Low Damage: " + CurrentPartyData.party[0].currentLowDamage);

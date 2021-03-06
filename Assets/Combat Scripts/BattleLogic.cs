@@ -58,9 +58,11 @@ public class BattleLogic : MonoBehaviour
 
     IEnumerator PlayerAttack(){
         System.Random r = new System.Random();
+        //damage is random int between lower and upper damage
         //Next upper bound is exclusive which is why the + 1 is used
         int damage = r.Next(CurrentPartyData.party[currentPlayer].currentLowDamage, CurrentPartyData.party[currentPlayer].currentHighDamage + 1);
         Debug.Log(damage);
+        //sets health to 0 if damage makes health negative
         if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage < 0)
         {
             CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
@@ -139,7 +141,7 @@ public class BattleLogic : MonoBehaviour
         }
     }
 
-    //Checks to see how won the battle and displays that info
+    //Checks to see who won the battle, displays info, and resets the CombatEnemyData properties
     void EndBattle(){
         if(state == BattleState.WIN){
             UI.SetText("You won the battle :)");
