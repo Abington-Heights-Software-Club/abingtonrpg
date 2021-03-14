@@ -20,7 +20,7 @@ public class TestClasses : MonoBehaviour
         //Debug.Log(character.health);
         CurrentPartyData.addMember("sharrow");
         CurrentPartyData.addMember("vannan");
-        CurrentPartyData.addMember("sharrow");
+        // CurrentPartyData.addMember("sharrow");
         foreach(CurrentPartyData.PartyMember member in CurrentPartyData.party)
         {
             if(member == null)

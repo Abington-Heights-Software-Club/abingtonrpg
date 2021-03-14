@@ -63,7 +63,7 @@ public class BattleLogic : MonoBehaviour
         int damage = r.Next(CurrentPartyData.party[currentPlayer].currentLowDamage, CurrentPartyData.party[currentPlayer].currentHighDamage + 1);
         Debug.Log(damage);
         //sets health to 0 if damage makes health negative
-        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage < 0)
+        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage <= 0)
         {
             CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
         }
