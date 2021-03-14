@@ -26,8 +26,10 @@ public class BattleLogic : MonoBehaviour
     private bool inventoryMode;
     public GameObject pannel; 
     public GameObject selection;
-
-    // Start is called before the first frame update
+    //int indicating which player is up to move
+    private int currentPlayer = 0;
+    //int indicating which enemy is up to move
+    private int currentEnemy = 0;
     void Start()
     {
         //sets the IEnumerator state to Start to begin a battle
@@ -56,8 +58,11 @@ public class BattleLogic : MonoBehaviour
 
     IEnumerator PlayerAttack(){
         System.Random r = new System.Random();
-        int damage = r.Next(CurrentPartyData.party[0].currentLowDamage, CurrentPartyData.party[0].currentHighDamage);
+        //damage is random int between lower and upper damage
+        //Next upper bound is exclusive which is why the + 1 is used
+        int damage = r.Next(CurrentPartyData.party[currentPlayer].currentLowDamage, CurrentPartyData.party[currentPlayer].currentHighDamage + 1);
         Debug.Log(damage);
+        //sets health to 0 if damage makes health negative
         if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage < 0)
         {
             CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
@@ -76,27 +81,41 @@ public class BattleLogic : MonoBehaviour
             state = BattleState.WIN;
             EndBattle();
         }
-        //continue to enemy turn 
+        //continue to next player or enemy turn
         else{
-            state = BattleState.ENEMYTURN;
-            StartCoroutine(EnemyTurn());
+            currentPlayer++;
+            //Debug.Log("currentPlayer: " + currentPlayer + " currentPartySize: " + CurrentPartyData.currentPartySize);
+            if(currentPlayer < CurrentPartyData.currentPartySize)
+            {
+                state = BattleState.PLAYERTURN;
+                playerTurn();
+            }
+            else
+            {
+                currentPlayer = 0;
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+            }
         }
 
     }
 //Same logic as player turn ^^^
     IEnumerator EnemyTurn(){
         System.Random r = new System.Random();
-        UI.SetText(CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name + " is attacking");
+        int enemeyTarget = r.Next(CurrentPartyData.currentPartySize);
+        Debug.Log("Enemy selected: " + enemeyTarget);
+        UI.SetText(CombatEnemyData.commonCombatEnemyParty[currentEnemy].combatEnemyData.name + " is attacking " + CurrentPartyData.party[enemeyTarget].playerData.name);
         yield return new WaitForSeconds(time-1f);
-        int damage = r.Next(CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.low_damage, CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.high_damage);
-        Debug.Log(damage);
-        if(CurrentPartyData.party[0].currentHealth - damage < 0)
+        //Next upper bound is exclusive which is why the + 1 is used
+        int damage = r.Next(CombatEnemyData.commonCombatEnemyParty[currentEnemy].combatEnemyData.low_damage, CombatEnemyData.commonCombatEnemyParty[currentEnemy].combatEnemyData.high_damage + 1);
+        Debug.Log("Enemy damage: " + damage);
+        if(CurrentPartyData.party[enemeyTarget].currentHealth - damage < 0)
         {
-            CurrentPartyData.party[0].currentHealth = 0;
+            CurrentPartyData.party[enemeyTarget].currentHealth = 0;
         }
         else
         {
-            CurrentPartyData.party[0].currentHealth -= damage;
+            CurrentPartyData.party[enemeyTarget].currentHealth -= damage;
         }
         UI.SetPlayerHp(CurrentPartyData.party[0].currentHealth);
         yield return new WaitForSeconds(time-1.5f);
@@ -106,12 +125,23 @@ public class BattleLogic : MonoBehaviour
             EndBattle();
         }
         else{
-            state = BattleState.PLAYERTURN;
-            playerTurn();
+            currentEnemy++;
+            if (currentEnemy < CombatEnemyData.currentEnemyPartySize)
+            {
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+            }
+            else
+            {
+                currentEnemy = 0;
+                state = BattleState.PLAYERTURN;
+                playerTurn();
+            }
+
         }
     }
 
-    //Checks to see how won the battle and displays that info
+    //Checks to see who won the battle, displays info, and resets the CombatEnemyData properties
     void EndBattle(){
         if(state == BattleState.WIN){
             UI.SetText("You won the battle :)");
@@ -119,29 +149,40 @@ public class BattleLogic : MonoBehaviour
         else if(state == BattleState.LOSS){
             UI.SetText("You lost the battle :(");
         }
+        CombatEnemyData.resetCombatEnemy();
     }
 
     void playerTurn(){
-        UI.SetText("Choose an action");
+        UI.SetText("Choose an action for " + CurrentPartyData.party[currentPlayer].playerData.name);
     }
 
     //just increases player health using Heal() method from Enemy class
     //doesn't  have to check for win because you can't win from healing
     IEnumerator PlayerHeal(){
-        if(CurrentPartyData.party[0].currentHealth + healAmount > CurrentPartyData.party[0].currentMaxHealth)
+        if(CurrentPartyData.party[currentPlayer].currentHealth + healAmount > CurrentPartyData.party[currentPlayer].currentMaxHealth)
         {
-            CurrentPartyData.party[0].currentHealth = CurrentPartyData.party[0].currentMaxHealth;
+            CurrentPartyData.party[currentPlayer].currentHealth = CurrentPartyData.party[currentPlayer].currentMaxHealth;
         }
         else
         {
-            CurrentPartyData.party[0].currentHealth += healAmount;
+            CurrentPartyData.party[currentPlayer].currentHealth += healAmount;
         }
         UI.SetPlayerHp(CurrentPartyData.party[0].currentHealth);
-        UI.SetText("You healed, wow, congrats");
+        UI.SetText(CurrentPartyData.party[currentPlayer].playerData.name + " healed, wow, congrats");
 
         yield return new WaitForSeconds(time);
-        state = BattleState.ENEMYTURN;
-        StartCoroutine(EnemyTurn());
+        currentPlayer++;
+        if (currentPlayer < CurrentPartyData.currentPartySize)
+        {
+            state = BattleState.PLAYERTURN;
+            playerTurn();
+        }
+        else
+        {
+            currentPlayer = 0;
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
     }
     //Used in OnClick function in UI; This can be found with the inspector
      public void OnAttackButton(){

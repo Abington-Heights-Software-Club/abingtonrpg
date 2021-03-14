@@ -7,6 +7,7 @@ public static class CombatEnemyData
     public static int enemyPartySize = 4;
     public static bool isBossFight = false;
     public static CommonCombatEnemy[] commonCombatEnemyParty = new CommonCombatEnemy[enemyPartySize];
+    public static int currentEnemyPartySize = 0;
     public static BossData boss { get; set; }
     public static int bossCurrentHealth { get; set; }
 
@@ -27,7 +28,14 @@ public static class CombatEnemyData
                 commonCombatEnemyParty[count] = new CommonCombatEnemy(id);
                 count++;
             }
+            currentEnemyPartySize = count;
         }
+    }
+    public static void resetCombatEnemy()
+    {
+        commonCombatEnemyParty = new CommonCombatEnemy[enemyPartySize];
+        boss = null;
+        bossCurrentHealth = 0;
     }
 
     public class CommonCombatEnemy {
