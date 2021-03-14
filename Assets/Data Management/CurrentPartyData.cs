@@ -19,7 +19,7 @@ public static class CurrentPartyData
     //Will fill up first available empty space. If there are no spaces it will swap the partyMember at int position with new one
     public static void addMember(string id, int position = -1)
     {
-        
+        // Debug.Log("CurrentPartySize: "+ currentPartySize  + "  PartySize: "+  partySize);
         if(currentPartySize < partySize)
         {
             //Debug.Log("First empty party " + currentPartySize);

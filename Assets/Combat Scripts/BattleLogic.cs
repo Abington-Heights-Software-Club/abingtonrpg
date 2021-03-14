@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum BattleState {START, PLAYERTURN, ENEMYTURN, WIN, LOSS }
+public enum BattleState {START, PLAYERSELECT, PLAYERINACTION, ENEMYTURN, WIN, LOSS }
 
 public class BattleLogic : MonoBehaviour
 {
@@ -51,12 +51,13 @@ public class BattleLogic : MonoBehaviour
 
 
         //switches IEnumerator to PlayerTurn
-        state = BattleState.PLAYERTURN ;
+        state = BattleState.PLAYERSELECT;
         playerTurn();
         
     }
 
     IEnumerator PlayerAttack(){
+        Debug.Log("Attack Started");
         System.Random r = new System.Random();
         //damage is random int between lower and upper damage
         //Next upper bound is exclusive which is why the + 1 is used
@@ -87,7 +88,7 @@ public class BattleLogic : MonoBehaviour
             //Debug.Log("currentPlayer: " + currentPlayer + " currentPartySize: " + CurrentPartyData.currentPartySize);
             if(currentPlayer < CurrentPartyData.currentPartySize)
             {
-                state = BattleState.PLAYERTURN;
+                state = BattleState.PLAYERSELECT;
                 playerTurn();
             }
             else
@@ -134,7 +135,7 @@ public class BattleLogic : MonoBehaviour
             else
             {
                 currentEnemy = 0;
-                state = BattleState.PLAYERTURN;
+                state = BattleState.PLAYERSELECT;
                 playerTurn();
             }
 
@@ -174,7 +175,7 @@ public class BattleLogic : MonoBehaviour
         currentPlayer++;
         if (currentPlayer < CurrentPartyData.currentPartySize)
         {
-            state = BattleState.PLAYERTURN;
+            state = BattleState.PLAYERSELECT;
             playerTurn();
         }
         else
@@ -187,19 +188,21 @@ public class BattleLogic : MonoBehaviour
     //Used in OnClick function in UI; This can be found with the inspector
      public void OnAttackButton(){
          //If the player spams button when its not their turn it will do nothing
-        if(state != BattleState.PLAYERTURN){
-            return;
+        if(state == BattleState.PLAYERSELECT){
+            //Go through player attack aka check if enemy alive and move to next IEnumerator
+            state = BattleState.PLAYERINACTION;
+            StartCoroutine(PlayerAttack());
         }
-        //Go through player attack aka check if enemy alive and move to next IEnumerator
-        StartCoroutine(PlayerAttack());
+
     }
     //Same concept as OnAttackButton ^^^
     public void OnHealButton(){
 
-        if(state != BattleState.PLAYERTURN){
-            return;
+        if(state ==BattleState.PLAYERSELECT){
+            state = BattleState.PLAYERINACTION;
+            StartCoroutine(PlayerHeal());
         }
-        StartCoroutine(PlayerHeal());
+        
     }
     public void HideSelectionShowInventory(){
         inventoryMode = !inventoryMode;
