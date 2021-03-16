@@ -24,7 +24,7 @@ public class ActivatorScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D col){
         active=true;
         if(col.gameObject.tag=="Note")
-            note= col.gameObject;
+            note=col.gameObject;
     }
 
     void OnTriggerExit2D(Collider2D col){
