@@ -8,6 +8,7 @@ public class ActivatorScript : MonoBehaviour
     SpriteRenderer sr;
     bool active = false;
     GameObject note;
+    Color old;
 
    void Awake () {
           sr = GetComponent<SpriteRenderer>();
@@ -15,7 +16,7 @@ public class ActivatorScript : MonoBehaviour
 
     void Start()
     {
-        
+       old=sr.color; 
     }
 
     // Update is called once per frame
@@ -38,9 +39,8 @@ public class ActivatorScript : MonoBehaviour
     }
 
     IEnumerator isPressed(){
-        Color old = sr.color;
         sr.color=new Color(0,0,0);
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.05f);
         sr.color=old;
     }
 }
