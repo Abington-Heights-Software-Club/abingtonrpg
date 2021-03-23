@@ -5,8 +5,13 @@ using UnityEngine;
 public class ActivatorScript : MonoBehaviour
 {   
     public KeyCode key;
+    SpriteRenderer sr;
     bool active = false;
     GameObject note;
+
+   void Awake () {
+          sr = GetComponent<SpriteRenderer>();
+   }
 
     void Start()
     {
@@ -18,6 +23,7 @@ public class ActivatorScript : MonoBehaviour
     {
      if(Input.GetKeyDown(key)&&active){
         Destroy(note);
+        StartCoroutine(isPressed());
      }   
     }
 
@@ -29,5 +35,12 @@ public class ActivatorScript : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D col){
         active=false;
+    }
+
+    IEnumerator isPressed(){
+        Color old = sr.color;
+        sr.color=new Color(0,0,0);
+        yield return new WaitForSeconds(0.2f);
+        sr.color=old;
     }
 }
