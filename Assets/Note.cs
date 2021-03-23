@@ -14,6 +14,7 @@ public class Note : MonoBehaviour{
     void Start()
         {
         rb.velocity=new Vector2(0,-speed);
+        speed = 3;
     }
 
     // Update is called once per frame
