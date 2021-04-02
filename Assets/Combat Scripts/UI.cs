@@ -4,35 +4,83 @@ using UnityEngine;
 using UnityEngine.UI;
 public class UI : MonoBehaviour
 {
-    public Text enemyNameText;
-    public Text playerNameText;
-    public Text levelText; 
-    public Slider playerHpSlider;
-    public Slider enemyHpSlider;
+    //All of the players UI elements
+    public Slider[] playerHpSliders = new Slider[4];
+    public Text[] playerNameTexts = new Text[4];
+    public Text[] playerLevelTexts = new Text[4];
+
+    //All of the enemies UI elements
+    public Slider[] enemyHpSliders = new Slider[4];
+    public Text[] enemyNameTexts = new Text[4];
+    
     //UI text where interaction with user is held
     public Text dialogue;
-    // Start is called before the first frame update
+
     //sets all standard player info
-    public void SetPlayerHUD(CurrentPartyData.PartyMember entity)
+    public void SetPlayerHUD()
     {
-        playerNameText.text = entity.playerData.name;
-        levelText.text = "Lvl. " + entity.currentLevel;
-        playerHpSlider.maxValue = entity.currentMaxHealth;
-        playerHpSlider.value = entity.currentHealth;
+        int i = 0;
+        foreach(CurrentPartyData.PartyMember entity in CurrentPartyData.party)
+        {
+            if(entity == null)
+            {
+                playerHpSliders[i].gameObject.SetActive(false);
+                playerNameTexts[i].gameObject.SetActive(false);
+                playerLevelTexts[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                playerNameTexts[i].text = entity.playerData.name;
+                playerLevelTexts[i].text = "Lvl. " + entity.currentLevel;
+                playerHpSliders[i].maxValue = entity.currentMaxHealth;
+                playerHpSliders[i].value = entity.currentHealth;
+            }
+            i++;
+        }
+        
     }
     //sets all standard enemy info
-    public void SetEnemyHUD(CombatEnemyData.CommonCombatEnemy entity){
-        enemyNameText.text = entity.combatEnemyData.name;
-        enemyHpSlider.maxValue= entity.combatEnemyData.health;
-        enemyHpSlider.value = entity.combatEnemyData.health;
+    public void SetEnemyHUD(){
+        int i = 0;
+        foreach (CombatEnemyData.CommonCombatEnemy entity in CombatEnemyData.commonCombatEnemyParty)
+        {
+            if (entity == null)
+            {
+                enemyHpSliders[i].gameObject.SetActive(false);
+                enemyNameTexts[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                enemyNameTexts[i].text = entity.combatEnemyData.name;
+                enemyHpSliders[i].maxValue = entity.combatEnemyData.health;
+                enemyHpSliders[i].value = entity.combatEnemyData.health;
+            }
+            i++;
+        }
     }
     //health right now is the only thing that changes in battle so it has it's own method
-    public void SetPlayerHp(int hp){
-        playerHpSlider.value = hp;
+    public void RefreshPlayerHp(){
+        int i = 0;
+        foreach (CurrentPartyData.PartyMember entity in CurrentPartyData.party)
+        {
+            if (entity != null)
+            {
+                playerHpSliders[i].value = entity.currentHealth;
+            }
+            i++;
+        }
     }
-    public void SetEnemyHp(int hp)
+    public void RefreshEnemyHp()
     {
-        enemyHpSlider.value = hp;
+        int i = 0;
+        foreach (CombatEnemyData.CommonCombatEnemy entity in CombatEnemyData.commonCombatEnemyParty)
+        {
+            if (entity != null)
+            {
+                enemyHpSliders[i].value = entity.currentHealth;
+            }
+            i++;
+        }
     }
    public void SetText(string message)
     {

@@ -43,9 +43,9 @@ public class BattleLogic : MonoBehaviour
     //Is called from start method
     IEnumerator SetUpBattle() {
         //sets all of player and enemy info to their tags above them
-        UI.SetPlayerHUD(CurrentPartyData.party[0]);
-        UI.SetEnemyHUD(CombatEnemyData.commonCombatEnemyParty[0]);
-        UI.SetText("You go through a hall and a " + CombatEnemyData.commonCombatEnemyParty[0].combatEnemyData.name + " approaches");
+        UI.SetPlayerHUD();
+        UI.SetEnemyHUD();
+        UI.SetText("An enemy approaches you!");
         //quirky line of code that gives user some time to digest the current scene before switching to player turn
         yield return new WaitForSeconds(time);
 
@@ -72,7 +72,7 @@ public class BattleLogic : MonoBehaviour
         {
             CombatEnemyData.commonCombatEnemyParty[0].currentHealth -= damage;
         }
-        UI.SetEnemyHp(CombatEnemyData.commonCombatEnemyParty[0].currentHealth);
+        UI.RefreshEnemyHp();
         UI.SetText("The attack is successful");
         yield return new WaitForSeconds(time);
         //if enemy dies during player turn it has to be a win
@@ -118,7 +118,7 @@ public class BattleLogic : MonoBehaviour
         {
             CurrentPartyData.party[enemeyTarget].currentHealth -= damage;
         }
-        UI.SetPlayerHp(CurrentPartyData.party[0].currentHealth);
+        UI.RefreshPlayerHp();
         yield return new WaitForSeconds(time-1.5f);
 
         if(CurrentPartyData.party[0].currentHealth == 0){
@@ -168,7 +168,7 @@ public class BattleLogic : MonoBehaviour
         {
             CurrentPartyData.party[currentPlayer].currentHealth += healAmount;
         }
-        UI.SetPlayerHp(CurrentPartyData.party[0].currentHealth);
+        UI.RefreshPlayerHp();
         UI.SetText(CurrentPartyData.party[currentPlayer].playerData.name + " healed, wow, congrats");
 
         yield return new WaitForSeconds(time);
