@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum BattleState {START, PLAYERSELECT, PLAYERINACTION, ENEMYTURN, WIN, LOSS }
+public enum BattleState {START, PLAYERSELECT, PLAYERCHOOSEENEMY, PLAYERINACTION, ENEMYTURN, WIN, LOSS }
 
 public class BattleLogic : MonoBehaviour
 {
@@ -30,14 +30,87 @@ public class BattleLogic : MonoBehaviour
     private int currentPlayer = 0;
     //int indicating which enemy is up to move
     private int currentEnemy = 0;
+    //int indicating what the user's arrow is currently selecting for an attack
+    private int currentSelectedEnemy = 0;
+
+    //bool array keeping track of which players are dead
+    bool[] playersAlive = { true, true, true, true };
+    //bool array keeping track of which enemies are dead
+    bool[] enemiesAlive = { true, true, true, true };
     void Start()
     {
+        //set empty spots as dead
+        int i = 0;
+        foreach (CombatEnemyData.CommonCombatEnemy entity in CombatEnemyData.commonCombatEnemyParty)
+        {
+            if (entity == null)
+            {
+                enemiesAlive[i] = false;
+            }
+            i++;
+        }
+        i = 0;
+        foreach (CurrentPartyData.PartyMember entity in CurrentPartyData.party)
+        {
+            if (entity == null)
+            {
+                playersAlive[i] = false;
+            }
+            i++;
+        }
         //sets the IEnumerator state to Start to begin a battle
         state = BattleState.START;
         //syntax to call an IEnumerator
         StartCoroutine(SetUpBattle());
         //
         pannel.gameObject.SetActive(inventoryMode);
+    }
+    private void Update()
+    {
+        if(state == BattleState.PLAYERCHOOSEENEMY)
+        {
+            UI.SetText("Select An Enemy");
+            if (Input.GetKeyDown("a"))
+            {
+                currentSelectedEnemy--;
+                while(currentSelectedEnemy == -1 || enemiesAlive[currentSelectedEnemy] == false)
+                {
+                    if (currentSelectedEnemy == -1)
+                    {
+                        currentSelectedEnemy = CombatEnemyData.currentEnemyPartySize - 1;
+                    }
+                    else
+                    {
+                        currentSelectedEnemy--;
+                    }
+                }
+                //Debug.Log("Current select: " + currentSelectedEnemy);
+                UI.changeArrow(currentSelectedEnemy, true);
+            }
+            if(Input.GetKeyDown("d"))
+            {
+                currentSelectedEnemy++;
+                while (currentSelectedEnemy == CombatEnemyData.currentEnemyPartySize || enemiesAlive[currentSelectedEnemy] == false)
+                {
+                    if (currentSelectedEnemy == CombatEnemyData.currentEnemyPartySize)
+                    {
+                        currentSelectedEnemy = 0;
+                    }
+                    else
+                    {
+                        currentSelectedEnemy++;
+                    }
+                }
+                //Debug.Log("Current select: " + currentSelectedEnemy);
+                UI.changeArrow(currentSelectedEnemy, true);
+            }
+            if(Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                state = BattleState.PLAYERINACTION;
+                UI.changeArrow(currentSelectedEnemy, false);
+                StartCoroutine(PlayerAttack(currentSelectedEnemy));
+            }
+        }
     }
 
     //Is called from start method
@@ -56,28 +129,44 @@ public class BattleLogic : MonoBehaviour
         
     }
 
-    IEnumerator PlayerAttack(){
-        Debug.Log("Attack Started");
+    IEnumerator PlayerAttack(int target){
+        //Debug.Log("Attack Started");
         System.Random r = new System.Random();
         //damage is random int between lower and upper damage
         //Next upper bound is exclusive which is why the + 1 is used
         int damage = r.Next(CurrentPartyData.party[currentPlayer].currentLowDamage, CurrentPartyData.party[currentPlayer].currentHighDamage + 1);
         Debug.Log(damage);
         //sets health to 0 if damage makes health negative
-        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth - damage <= 0)
+        if(CombatEnemyData.commonCombatEnemyParty[target].currentHealth - damage <= 0)
         {
-            CombatEnemyData.commonCombatEnemyParty[0].currentHealth = 0;
+            CombatEnemyData.commonCombatEnemyParty[target].currentHealth = 0;
         }
         else
         {
-            CombatEnemyData.commonCombatEnemyParty[0].currentHealth -= damage;
+            CombatEnemyData.commonCombatEnemyParty[target].currentHealth -= damage;
         }
         UI.RefreshEnemyHp();
         UI.SetText("The attack is successful");
         yield return new WaitForSeconds(time);
-        //if enemy dies during player turn it has to be a win
-        //eventually may have to check if all enemy healths = 0
-        if(CombatEnemyData.commonCombatEnemyParty[0].currentHealth == 0)
+        bool gameOver = true;
+        for(int i = 0; i < CurrentPartyData.currentPartySize; i++)
+        {
+            if(enemiesAlive[i] == true)
+            {
+                if (CombatEnemyData.commonCombatEnemyParty[i].currentHealth == 0)
+                {
+                    enemiesAlive[i] = false;
+                    UI.enemyDead(i);
+                    UI.SetText(CombatEnemyData.commonCombatEnemyParty[i].combatEnemyData.name + " has passed out!");
+                    yield return new WaitForSeconds(time);
+                }
+                else
+                {
+                    gameOver = false;
+                }
+            }
+        }
+        if(gameOver)
         {
             state = BattleState.WIN;
             EndBattle();
@@ -189,9 +278,13 @@ public class BattleLogic : MonoBehaviour
      public void OnAttackButton(){
          //If the player spams button when its not their turn it will do nothing
         if(state == BattleState.PLAYERSELECT){
-            //Go through player attack aka check if enemy alive and move to next IEnumerator
-            state = BattleState.PLAYERINACTION;
-            StartCoroutine(PlayerAttack());
+            currentSelectedEnemy = 0;
+            while(!enemiesAlive[currentSelectedEnemy])
+            {
+                currentSelectedEnemy++;
+            }
+            state = BattleState.PLAYERCHOOSEENEMY;
+            UI.changeArrow(currentSelectedEnemy, true);
         }
 
     }

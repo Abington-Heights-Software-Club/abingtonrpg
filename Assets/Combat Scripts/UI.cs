@@ -8,14 +8,25 @@ public class UI : MonoBehaviour
     public Slider[] playerHpSliders = new Slider[4];
     public Text[] playerNameTexts = new Text[4];
     public Text[] playerLevelTexts = new Text[4];
+    public GameObject[] playerPads = new GameObject[4];
+    public GameObject[] playerSprites = new GameObject[4];
 
     //All of the enemies UI elements
     public Slider[] enemyHpSliders = new Slider[4];
     public Text[] enemyNameTexts = new Text[4];
-    
+    public GameObject[] enemyPads = new GameObject[4];
+    public GameObject[] enemySprites = new GameObject[4];
+   
     //UI text where interaction with user is held
     public Text dialogue;
 
+    public GameObject arrow;
+    public int positionAboveEnemy;
+
+    private void Start()
+    {
+        changeArrow(0, false);
+    }
     //sets all standard player info
     public void SetPlayerHUD()
     {
@@ -27,6 +38,8 @@ public class UI : MonoBehaviour
                 playerHpSliders[i].gameObject.SetActive(false);
                 playerNameTexts[i].gameObject.SetActive(false);
                 playerLevelTexts[i].gameObject.SetActive(false);
+                playerPads[i].SetActive(false);
+                playerSprites[i].SetActive(false);
             }
             else
             {
@@ -48,6 +61,8 @@ public class UI : MonoBehaviour
             {
                 enemyHpSliders[i].gameObject.SetActive(false);
                 enemyNameTexts[i].gameObject.SetActive(false);
+                enemyPads[i].SetActive(false);
+                enemySprites[i].SetActive(false);
             }
             else
             {
@@ -58,7 +73,6 @@ public class UI : MonoBehaviour
             i++;
         }
     }
-    //health right now is the only thing that changes in battle so it has it's own method
     public void RefreshPlayerHp(){
         int i = 0;
         foreach (CurrentPartyData.PartyMember entity in CurrentPartyData.party)
@@ -82,10 +96,29 @@ public class UI : MonoBehaviour
             i++;
         }
     }
-   public void SetText(string message)
+    public void playerDead(int position)
+    {
+        playerHpSliders[position].gameObject.SetActive(false);
+        playerNameTexts[position].gameObject.SetActive(false);
+        playerLevelTexts[position].gameObject.SetActive(false);
+        playerPads[position].SetActive(false);
+        playerSprites[position].SetActive(false);
+    }
+    public void enemyDead(int position)
+    {
+        enemyHpSliders[position].gameObject.SetActive(false);
+        enemyNameTexts[position].gameObject.SetActive(false);
+        enemyPads[position].SetActive(false);
+        enemySprites[position].SetActive(false);
+    }
+    public void SetText(string message)
     {
         dialogue.text = message;
     }
-
-    
+    //Changes the position of the arrow to another enemy
+    public void changeArrow(int enemySelected, bool isVisible)
+    {
+        arrow.SetActive(isVisible);
+        arrow.transform.position = new Vector2(enemySprites[enemySelected].transform.position.x, enemySprites[enemySelected].transform.position.y + positionAboveEnemy);
+    }
 }
